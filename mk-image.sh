@@ -53,8 +53,8 @@ generate_boot_image() {
 
 	echo -e "\e[36m Generate Boot image start\e[0m"
 
-	# 100 Mb
-	mkfs.vfat -n "boot" -S 512 -C ${BOOT} $((100 * 1024))
+	# 512 Mb
+	mkfs.vfat -n "boot" -S 512 -C ${BOOT} $((512 * 1024))
 
 	mmd -i ${BOOT} ::/extlinux
 	mcopy -i ${BOOT} -s ${EXTLINUXPATH}/${CHIP}.conf ::/extlinux/extlinux.conf
