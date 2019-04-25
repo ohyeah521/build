@@ -100,7 +100,7 @@ generate_system_image() {
 	parted -s ${SYSTEM} set 4 boot on
 	parted -s ${SYSTEM} -- unit s mkpart rootfs ${ROOTFS_START} -34s
 
-	if [ "$CHIP" == "rk3328" ] || [ "$CHIP" == "rk3399" ]; then
+	if [ "$CHIP" == "rk3328" ] || [ "$CHIP" == "rk3399" ] || [ "$CHIP" == "rk3399pro" ]; then
 		ROOT_UUID="B921B045-1DF0-41C3-AF44-4C6F280D3FAE"
 	else
 		ROOT_UUID="69DAD710-2CE4-4E3C-B16C-21A1D49ABED3"
@@ -118,7 +118,7 @@ EOF
 	# burn u-boot
 	if [ "$CHIP" == "rk3288" ] || [ "$CHIP" == "rk322x" ] || [ "$CHIP" == "rk3036" ]; then
 		dd if=${OUT}/u-boot/idbloader.img of=${SYSTEM} seek=${LOADER1_START} conv=notrunc
-	elif [ "$CHIP" == "rk3399" ]; then
+	elif [ "$CHIP" == "rk3399" ] || [ "$CHIP" == "rk3399pro" ] ; then
 		dd if=${OUT}/u-boot/idbloader.img of=${SYSTEM} seek=${LOADER1_START} conv=notrunc
 
 		dd if=${OUT}/u-boot/uboot.img of=${SYSTEM} seek=${LOADER2_START} conv=notrunc

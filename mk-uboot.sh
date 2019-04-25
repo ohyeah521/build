@@ -152,6 +152,74 @@ EOF
 	mv ${OUT}/u-boot/spi/Firmware.md5 ${OUT}/u-boot/spi/uboot-trust-spi.img.md5
 
 
+elif [ "${CHIP}" == "rk3399pro" ]; then
+	$TOOLPATH/loaderimage --pack --uboot ./u-boot-dtb.bin uboot.img 0x200000 --size 1024 1
+
+	tools/mkimage -n rk3399pro -T rksd -d ../rkbin/bin/rk33/rk3399pro_ddr_800MHz_v1.20.bin idbloader.img
+	cat ../rkbin/bin/rk33/rk3399pro_miniloader_v1.15.bin >> idbloader.img
+	cp idbloader.img ${OUT}/u-boot/
+
+	tools/mkimage -n rk3399pro -T rkspi -d ../rkbin/bin/rk33/rk3399pro_ddr_800MHz_v1.20.bin idbloader-spi.img
+	cat ../rkbin/bin/rk33/rk3399_miniloader_spinor_v1.14.bin >> idbloader-spi.img
+	cp idbloader-spi.img ${OUT}/u-boot/spi
+
+	cp ../rkbin/bin/rk33/rk3399pro_loader_v1.20.115.bin ${OUT}/u-boot/
+	cp ../rkbin/bin/rk33/rk3399pro_npu_loader_v1.02.102.bin ${OUT}/u-boot/
+	cp ../rkbin/bin/rk33/rk3399_loader_spinor_v1.15.114.bin ${OUT}/u-boot/spi
+
+	cat >trust.ini <<EOF
+[VERSION]
+MAJOR=1
+MINOR=0
+[BL30_OPTION]
+SEC=0
+[BL31_OPTION]
+SEC=1
+PATH=../rkbin/bin/rk33/rk3399pro_bl31_v1.22.elf
+ADDR=0x10000
+[BL32_OPTION]
+SEC=0
+[BL33_OPTION]
+SEC=0
+[OUTPUT]
+PATH=trust.img
+EOF
+
+	$TOOLPATH/trust_merger --size 1024 1 trust.ini
+
+	cp uboot.img ${OUT}/u-boot/
+	cp trust.img ${OUT}/u-boot/
+
+	cat > spi.ini <<EOF
+[System]
+FwVersion=18.08.03
+BLANK_GAP=1
+FILL_BYTE=0
+[UserPart1]
+Name=IDBlock
+Flag=0
+Type=2
+File=../rkbin/bin/rk33/rk3399pro_ddr_800MHz_v1.20.bin,../rkbin/bin/rk33/rk3399pro_miniloader_v1.15.bin
+PartOffset=0x40
+PartSize=0x7C0
+[UserPart2]
+Name=uboot
+Type=0x20
+Flag=0
+File=./uboot.img
+PartOffset=0x1000
+PartSize=0x800
+[UserPart3]
+Name=trust
+Type=0x10
+Flag=0
+File=./trust.img
+PartOffset=0x1800
+PartSize=0x800
+EOF
+	$TOOLPATH/firmwareMerger -P spi.ini ${OUT}/u-boot/spi
+	mv ${OUT}/u-boot/spi/Firmware.img ${OUT}/u-boot/spi/uboot-trust-spi.img
+	mv ${OUT}/u-boot/spi/Firmware.md5 ${OUT}/u-boot/spi/uboot-trust-spi.img.md5
 elif [ "${CHIP}" == "rk3128" ]; then
 	$TOOLPATH/loaderimage --pack --uboot ./u-boot-dtb.bin uboot.img
 
