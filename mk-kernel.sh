@@ -28,19 +28,24 @@ fi
 
 echo -e "\e[36m Building kernel for ${BOARD} board! \e[0m"
 
-cd ${LOCALPATH}/kernel
-[ ! -e .config ] && echo -e "\e[36m Using ${DEFCONFIG} \e[0m" && make ${DEFCONFIG}
-
-make -j8
-cd ${LOCALPATH}
-
-KERNEL_VERSION=$(cat ${LOCALPATH}/kernel/include/config/kernel.release)
+KERNEL_VERSION=$(cd ${LOCALPATH}/kernel && make kernelversion)
+echo $KERNEL_VERSION
 
 if version_gt "${KERNEL_VERSION}" "4.5"; then
 	if [ "${DTB_MAINLINE}" ]; then
 		DTB=${DTB_MAINLINE}
 	fi
+
+	if [ "${DEFCONFIG_MAINLINE}" ]; then
+		DEFCONFIG=${DEFCONFIG_MAINLINE}
+	fi
 fi
+
+cd ${LOCALPATH}/kernel
+[ ! -e .config ] && echo -e "\e[36m Using ${DEFCONFIG} \e[0m" && make ${DEFCONFIG}
+
+make -j8
+cd ${LOCALPATH}
 
 if [ "${ARCH}" == "arm" ]; then
 	cp ${LOCALPATH}/kernel/arch/arm/boot/zImage ${OUT}/kernel/
