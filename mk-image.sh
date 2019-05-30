@@ -13,8 +13,8 @@ PATH=$PATH:$TOOLPATH
 source $LOCALPATH/build/partitions.sh
 
 usage() {
-	echo -e "\nUsage: build/mk-image.sh -c rk3288 -t system -r rk-rootfs-build/linaro-rootfs.img \n"
-	echo -e "       build/mk-image.sh -c rk3288 -t boot\n"
+	echo -e "\nUsage: build/mk-image.sh -c rk3399 -t system -r rk-rootfs-build/linaro-rootfs.img \n"
+	echo -e "       build/mk-image.sh -c rk3399 -t boot -b rockpi4b\n"
 }
 finish() {
 	echo -e "\e[31m MAKE IMAGE FAILED.\e[0m"
@@ -23,7 +23,7 @@ finish() {
 trap finish ERR
 
 OLD_OPTIND=$OPTIND
-while getopts "c:t:r:h" flag; do
+while getopts "c:t:r:b:h" flag; do
 	case $flag in
 		c)
 			CHIP="$OPTARG"
@@ -33,6 +33,9 @@ while getopts "c:t:r:h" flag; do
 			;;
 		r)
 			ROOTFS_PATH="$OPTARG"
+			;;
+		b)
+			BOARD="$OPTARG"
 			;;
 	esac
 done
@@ -57,6 +60,10 @@ generate_boot_image() {
 	mkfs.vfat -n "boot" -S 512 -C ${BOOT} $((500 * 1024))
 
 	mmd -i ${BOOT} ::/extlinux
+	if [ "${BOARD}" == "rockpi4a" ] || [ "${BOARD}" == "rockpi4b" ]; then
+		mmd -i ${BOOT} ::/overlays
+	fi
+
 	mcopy -i ${BOOT} -s ${EXTLINUXPATH}/${CHIP}.conf ::/extlinux/extlinux.conf
 	mcopy -i ${BOOT} -s ${OUT}/kernel/* ::
 

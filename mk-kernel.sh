@@ -20,6 +20,12 @@ fi
 [ ! -d ${OUT} ] && mkdir ${OUT}
 [ ! -d ${OUT}/kernel ] && mkdir ${OUT}/kernel
 
+rm -rf ${OUT}/kernel/overlays
+
+if [ "$BOARD" == "rockpi4a" ] || [ "$BOARD" == "rockpi4b" ]; then
+	mkdir ${OUT}/kernel/overlays
+fi
+
 source $LOCALPATH/build/board_configs.sh $BOARD
 
 if [ $? -ne 0 ]; then
@@ -53,12 +59,20 @@ if [ "${ARCH}" == "arm" ]; then
 else
 	cp ${LOCALPATH}/kernel/arch/arm64/boot/Image ${OUT}/kernel/
 	cp ${LOCALPATH}/kernel/arch/arm64/boot/dts/rockchip/${DTB} ${OUT}/kernel/
+
+	[ -d "${OUT}/kernel/overlays" ] && echo "remove dtbo files" && rm -rf ${OUT}/kernel/overlays/*
+	[ -e "${OUT}/kernel/hw_intfc.conf" ] && echo "remove hw_intfc.conf file" && rm -rf ${OUT}/kernel/hw_intfc.conf
+
+	if [ "${BOARD}" == "rockpi4a" ] || [ "${BOARD}" == "rockpi4b" ] ; then
+		cp ${LOCALPATH}/kernel/arch/arm64/boot/dts/rockchip/overlays-rockpi4/*.dtbo ${OUT}/kernel/overlays/
+		cp ${LOCALPATH}/kernel/arch/arm64/boot/dts/rockchip/overlays-rockpi4/hw_intfc.conf ${OUT}/kernel/
+	fi
 fi
 
 # Change extlinux.conf according board
 sed -e "s,fdt .*,fdt /$DTB,g" \
 	-i ${EXTLINUXPATH}/${CHIP}.conf
 
-./build/mk-image.sh -c ${CHIP} -t boot
+./build/mk-image.sh -c ${CHIP} -t boot -b ${BOARD}
 
 echo -e "\e[36m Kernel build success! \e[0m"
