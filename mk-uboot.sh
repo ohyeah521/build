@@ -233,6 +233,68 @@ elif [ "${CHIP}" == "rk3128" ]; then
 
 	cp uboot.img ${OUT}/u-boot/
 	mv trust.img ${OUT}/u-boot/
-fi
+elif [ "${CHIP}" == "rk3308" ]; then
+	$TOOLPATH/loaderimage --pack --uboot ./u-boot-dtb.bin uboot.img 0x600000 --size 1024 1
 
+	tools/mkimage -n rk3308 -T rksd -d ../rkbin/bin/rk33/rk3308_ddr_589MHz_uart2_m0_v1.26.bin idbloader.img
+	cat ../rkbin/bin/rk33/rk3308_miniloader_v1.13.bin >> idbloader.img
+	cp idbloader.img ${OUT}/u-boot/
+
+	#cp ../rkbin/bin/rk33/rk3308_loader_589MHz_uart2_m0_v1.26.111.bin ${OUT}/u-boot/
+
+	cat >trust.ini <<EOF
+[VERSION]
+MAJOR=1
+MINOR=0
+[BL30_OPTION]
+SEC=0
+[BL31_OPTION]
+SEC=1
+PATH=../rkbin/bin/rk33/rk3308_bl31_v2.10.elf
+ADDR=0x00010000
+[BL32_OPTION]
+SEC=0
+[BL33_OPTION]
+SEC=0
+[OUTPUT]
+PATH=trust.img
+EOF
+
+	$TOOLPATH/trust_merger --size 1024 1 trust.ini
+
+	cp uboot.img ${OUT}/u-boot/
+	cp trust.img ${OUT}/u-boot/
+
+	cat > spi.ini <<EOF
+[System]
+FwVersion=18.08.03
+BLANK_GAP=1
+FILL_BYTE=0
+[UserPart1]
+Name=IDBlock
+Flag=0
+Type=2
+File=../rkbin/bin/rk33/rk3308_ddr_589MHz_uart2_m0_v1.26.bin,../rkbin/bin/rk33/rk3308_miniloader_v1.13.bin
+PartOffset=0x40
+PartSize=0x7C0
+[UserPart2]
+Name=uboot
+Type=0x20
+Flag=0
+File=./uboot.img
+PartOffset=0x1000
+PartSize=0x800
+[UserPart3]
+Name=trust
+Type=0x10
+Flag=0
+File=./trust.img
+PartOffset=0x1800
+PartSize=0x800
+EOF
+	$TOOLPATH/firmwareMerger -P spi.ini ${OUT}/u-boot/spi
+	mv ${OUT}/u-boot/spi/Firmware.img ${OUT}/u-boot/spi/uboot-trust-spi.img
+	mv ${OUT}/u-boot/spi/Firmware.md5 ${OUT}/u-boot/spi/uboot-trust-spi.img.md5
+
+fi
 echo -e "\e[36m U-boot IMAGE READY! \e[0m"

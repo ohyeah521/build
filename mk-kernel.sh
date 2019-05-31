@@ -22,7 +22,7 @@ fi
 
 rm -rf ${OUT}/kernel/overlays
 
-if [ "$BOARD" == "rockpi4a" ] || [ "$BOARD" == "rockpi4b" ]; then
+if [ "$BOARD" == "rockpi4a" ] || [ "$BOARD" == "rockpi4b" ] || [ "$BOARD" == "rockpis" ]; then
 	mkdir ${OUT}/kernel/overlays
 fi
 
@@ -66,6 +66,9 @@ else
 	if [ "${BOARD}" == "rockpi4a" ] || [ "${BOARD}" == "rockpi4b" ] ; then
 		cp ${LOCALPATH}/kernel/arch/arm64/boot/dts/rockchip/overlays-rockpi4/*.dtbo ${OUT}/kernel/overlays/
 		cp ${LOCALPATH}/kernel/arch/arm64/boot/dts/rockchip/overlays-rockpi4/hw_intfc.conf ${OUT}/kernel/
+	elif [ "${BOARD}" == "rockpis" ] ; then
+		cp ${LOCALPATH}/kernel/arch/arm64/boot/dts/rockchip/overlays-rockpis/*.dtbo ${OUT}/kernel/overlays/
+		cp ${LOCALPATH}/kernel/arch/arm64/boot/dts/rockchip/overlays-rockpis/hw_intfc.conf ${OUT}/kernel/
 	fi
 fi
 
