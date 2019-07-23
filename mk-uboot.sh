@@ -240,8 +240,6 @@ elif [ "${CHIP}" == "rk3308" ]; then
 	cat ../rkbin/bin/rk33/rk3308_miniloader_v1.14.bin >> idbloader.img
 	cp idbloader.img ${OUT}/u-boot/
 
-	#cp ../rkbin/bin/rk33/rk3308_loader_589MHz_uart2_m0_v1.26.111.bin ${OUT}/u-boot/
-
 	cat >trust.ini <<EOF
 [VERSION]
 MAJOR=1
@@ -264,37 +262,5 @@ EOF
 
 	cp uboot.img ${OUT}/u-boot/
 	cp trust.img ${OUT}/u-boot/
-
-	cat > spi.ini <<EOF
-[System]
-FwVersion=18.08.03
-BLANK_GAP=1
-FILL_BYTE=0
-[UserPart1]
-Name=IDBlock
-Flag=0
-Type=2
-File=../rkbin/bin/rk33/rk3308_ddr_589MHz_uart2_m0_v1.26.bin,../rkbin/bin/rk33/rk3308_miniloader_v1.14.bin
-PartOffset=0x40
-PartSize=0x7C0
-[UserPart2]
-Name=uboot
-Type=0x20
-Flag=0
-File=./uboot.img
-PartOffset=0x1000
-PartSize=0x800
-[UserPart3]
-Name=trust
-Type=0x10
-Flag=0
-File=./trust.img
-PartOffset=0x1800
-PartSize=0x800
-EOF
-	$TOOLPATH/firmwareMerger -P spi.ini ${OUT}/u-boot/spi
-	mv ${OUT}/u-boot/spi/Firmware.img ${OUT}/u-boot/spi/uboot-trust-spi.img
-	mv ${OUT}/u-boot/spi/Firmware.md5 ${OUT}/u-boot/spi/uboot-trust-spi.img.md5
-
 fi
 echo -e "\e[36m U-boot IMAGE READY! \e[0m"
