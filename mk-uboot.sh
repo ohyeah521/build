@@ -240,6 +240,13 @@ elif [ "${CHIP}" == "rk3308" ]; then
 	cat ../rkbin/bin/rk33/rk3308_miniloader_v1.13.bin >> idbloader.img
 	cp idbloader.img ${OUT}/u-boot/
 
+[ ! -d ${OUT}/u-boot/sd-nand ] && mkdir ${OUT}/u-boot/sd-nand
+
+	tools/mkimage -n rk3308 -T rksd -d ../rkbin/bin/rk33/rk3308_ddr_589MHz_uart0_m0_v1.26.bin idbloader-sd-nand.img
+	cat ../rkbin/bin/rk33/rk3308_miniloader_emmc_port_support_sd_20190717.bin >> idbloader-sd-nand.img
+
+	cp idbloader-sd-nand.img ${OUT}/u-boot/sd-nand
+	cp ../rkbin/bin/rk33/rk3308_loader_uart0_m0_emmc_port_support_sd_20190717.bin ${OUT}/u-boot/sd-nand
 	cat >trust.ini <<EOF
 [VERSION]
 MAJOR=1
