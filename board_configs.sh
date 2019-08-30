@@ -27,6 +27,14 @@ case ${BOARD} in
 		export CROSS_COMPILE=aarch64-linux-gnu-
 		CHIP="rk3399pro"
 		;;
+	"rockpin10")
+		DEFCONFIG=rockchip_linux_defconfig
+		UBOOT_DEFCONFIG=rk3399pro_defconfig
+		DTB=rk3399pro-rockpi-n10-linux-dsi.dtb
+		export ARCH=arm64
+		export CROSS_COMPILE=aarch64-linux-gnu-
+		CHIP="rk3399pro"
+		;;
 	"rk3399-excavator")
 		DEFCONFIG=rockchip_linux_defconfig
 		UBOOT_DEFCONFIG=evb-rk3399_defconfig
@@ -107,6 +115,12 @@ case ${BOARD} in
 		DEFCONFIG=rockchip_linux_defconfig
 		UBOOT_DEFCONFIG=evb-rk3288_defconfig
 		DTB=rk3288-evb-act8846.dtb
+		CHIP="rk3288"
+		;;
+	"rockpin8")
+		DEFCONFIG=rockchip_linux_defconfig
+		UBOOT_DEFCONFIG=evb-rk3288_defconfig
+		DTB=rk3288-rockpi-n8-linux.dtb
 		CHIP="rk3288"
 		;;
 	"rk3288-evb-rk808")
