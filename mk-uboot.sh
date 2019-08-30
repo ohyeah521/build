@@ -36,7 +36,7 @@ echo -e "\e[36m Using ${UBOOT_DEFCONFIG} \e[0m"
 cd ${LOCALPATH}/u-boot
 make ${UBOOT_DEFCONFIG} all
 
-if [ "${CHIP}" == "rk3288" ] || [ "${CHIP}" == "rk322x" ] || [ "${CHIP}" == "rk3036" ]; then
+if  [ "${CHIP}" == "rk322x" ] || [ "${CHIP}" == "rk3036" ]; then
 	if [ `grep CONFIG_SPL_OF_CONTROL=y ./.config` ] && \
 			! [ `grep CONFIG_SPL_OF_PLATDATA=y .config` ] ; then
 		SPL_BINARY=u-boot-spl-dtb.bin
@@ -53,6 +53,21 @@ if [ "${CHIP}" == "rk3288" ] || [ "${CHIP}" == "rk322x" ] || [ "${CHIP}" == "rk3
 		rksd -d spl/${SPL_BINARY} idbloader.img
 	cat u-boot-dtb.bin >>idbloader.img
 	cp idbloader.img ${OUT}/u-boot/
+elif [ "${CHIP}" == "rk3288" ]; then
+	$TOOLPATH/loaderimage --pack --uboot ./u-boot-dtb.bin uboot.img 0x200000 --size 1024 1
+	tools/mkimage -n rk3288 -T rksd -d ../rkbin/bin/rk32/rk3288_ddr_400MHz_v1.07.bin idbloader.img
+	cat ../rkbin/bin/rk32/rk3288_miniloader_v2.54.bin >> idbloader.img
+	cp idbloader.img ${OUT}/u-boot/
+	echo "idbloader.img is ready"
+
+	$TOOLPATH/loaderimage --pack --uboot ./u-boot.bin uboot.img 0x0
+
+	TOS_TA=`sed -n "/TOSTA=/s/TOSTA=//p" ../rkbin/RKTRUST/RK3288TOS.ini|tr -d '\r'`
+	TOS_TA=$(echo ${TOS_TA} | sed "s/tools\/rk_tools\///g")
+	$TOOLPATH/loaderimage --pack --trustos ../rkbin/${TOS_TA} ./trust.img 0x8400000
+
+	mv trust.img ${OUT}/u-boot/
+	cp uboot.img ${OUT}/u-boot/
 elif [ "${CHIP}" == "rk3328" ]; then
 	$TOOLPATH/loaderimage --pack --uboot ./u-boot-dtb.bin uboot.img 0x200000
 
