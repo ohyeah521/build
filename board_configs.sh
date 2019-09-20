@@ -60,11 +60,31 @@ case ${BOARD} in
 		export CROSS_COMPILE=aarch64-linux-gnu-
 		CHIP="rk3399"
 		;;
+	"rockpi4a")
+		DEFCONFIG=rockchip_linux_defconfig
+		DEFCONFIG_MAINLINE=defconfig
+		UBOOT_DEFCONFIG=rock-pi-4a-rk3399_defconfig
+		DTB=rockpi-4a-linux.dtb
+		DTB_MAINLINE=rk3399-rock-pi-4.dtb
+		export ARCH=arm64
+		export CROSS_COMPILE=aarch64-linux-gnu-
+		CHIP="rk3399"
+		;;
 	"rockpi4b")
 		DEFCONFIG=rockchip_linux_defconfig
 		DEFCONFIG_MAINLINE=defconfig
 		UBOOT_DEFCONFIG=rock-pi-4b-rk3399_defconfig
 		DTB=rockpi-4b-linux.dtb
+		DTB_MAINLINE=rk3399-rock-pi-4.dtb
+		export ARCH=arm64
+		export CROSS_COMPILE=aarch64-linux-gnu-
+		CHIP="rk3399"
+		;;
+	"rockpi4c")
+		DEFCONFIG=rockchip_linux_defconfig
+		DEFCONFIG_MAINLINE=defconfig
+		UBOOT_DEFCONFIG=rock-pi-4c-rk3399_defconfig
+		DTB=rockpi-4c-linux.dtb
 		DTB_MAINLINE=rk3399-rock-pi-4.dtb
 		export ARCH=arm64
 		export CROSS_COMPILE=aarch64-linux-gnu-
