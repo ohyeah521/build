@@ -69,12 +69,12 @@ elif [ "${CHIP}" == "rk3288" ]; then
 	mv trust.img ${OUT}/u-boot/
 	cp uboot.img ${OUT}/u-boot/
 elif [ "${CHIP}" == "rk3328" ]; then
-	$TOOLPATH/loaderimage --pack --uboot ./u-boot-dtb.bin uboot.img 0x200000
+	$TOOLPATH/loaderimage --pack --uboot ./u-boot-dtb.bin uboot.img 0x200000 --size 1024 1
 
-	tools/mkimage -n rk3328 -T rksd -d ../rkbin/bin/rk33/rk3328_ddr_786MHz_v1.06.bin idbloader.img
-	cat ../rkbin/bin/rk33/rk3328_miniloader_v2.43.bin >> idbloader.img
+	tools/mkimage -n rk3328 -T rksd -d ../rkbin/bin/rk33/rk3328_ddr_333MHz_v1.16.bin idbloader.img
+	cat ../rkbin/bin/rk33/rk322xh_miniloader_v2.50.bin >> idbloader.img
 	cp idbloader.img ${OUT}/u-boot/	
-	cp ../rkbin/bin/rk33/rk3328_loader_ddr786_v1.06.243.bin ${OUT}/u-boot/
+	cp ../rkbin/bin/rk33/rk3328_loader_ddr333_v1.16.250.bin ${OUT}/u-boot/
 
 	cat >trust.ini <<EOF
 [VERSION]
@@ -84,7 +84,7 @@ MINOR=2
 SEC=0
 [BL31_OPTION]
 SEC=1
-PATH=../rkbin/bin/rk33/rk3328_bl31_v1.34.bin
+PATH=../rkbin/bin/rk33/rk322xh_bl31_v1.42.elf
 ADDR=0x10000
 [BL32_OPTION]
 SEC=0
@@ -94,10 +94,10 @@ SEC=0
 PATH=trust.img
 EOF
 
-	$TOOLPATH/trust_merger trust.ini
+	$TOOLPATH/trust_merger --size 1024 1 trust.ini
 
 	cp uboot.img ${OUT}/u-boot/
-	mv trust.img ${OUT}/u-boot/
+	cp trust.img ${OUT}/u-boot/
 elif [ "${CHIP}" == "rk3399" ]; then
 	$TOOLPATH/loaderimage --pack --uboot ./u-boot-dtb.bin uboot.img 0x200000 --size 1024 1
 
