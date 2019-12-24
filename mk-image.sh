@@ -107,15 +107,22 @@ generate_system_image() {
 
 	dd if=/dev/zero of=${SYSTEM} bs=1M count=0 seek=$GPT_IMAGE_SIZE
 
-	parted -s ${SYSTEM} mklabel gpt
-	parted -s ${SYSTEM} unit s mkpart loader1 ${LOADER1_START} $(expr ${RESERVED1_START} - 1)
-	# parted -s ${SYSTEM} unit s mkpart reserved1 ${RESERVED1_START} $(expr ${RESERVED2_START} - 1)
-	# parted -s ${SYSTEM} unit s mkpart reserved2 ${RESERVED2_START} $(expr ${LOADER2_START} - 1)
-	parted -s ${SYSTEM} unit s mkpart loader2 ${LOADER2_START} $(expr ${ATF_START} - 1)
-	parted -s ${SYSTEM} unit s mkpart trust ${ATF_START} $(expr ${BOOT_START} - 1)
-	parted -s ${SYSTEM} unit s mkpart boot ${BOOT_START} $(expr ${ROOTFS_START} - 1)
-	parted -s ${SYSTEM} set 4 boot on
-	parted -s ${SYSTEM} -- unit s mkpart rootfs ${ROOTFS_START} -34s
+	if [ "$BOARD" == "rockpi4" ]; then
+		parted -s ${SYSTEM} mklabel gpt
+		parted -s ${SYSTEM} unit s mkpart loader1 ${LOADER1_START} $(expr ${RESERVED1_START} - 1)
+		# parted -s ${SYSTEM} unit s mkpart reserved1 ${RESERVED1_START} $(expr ${RESERVED2_START} - 1)
+		# parted -s ${SYSTEM} unit s mkpart reserved2 ${RESERVED2_START} $(expr ${LOADER2_START} - 1)
+		parted -s ${SYSTEM} unit s mkpart loader2 ${LOADER2_START} $(expr ${ATF_START} - 1)
+		parted -s ${SYSTEM} unit s mkpart trust ${ATF_START} $(expr ${BOOT_START} - 1)
+		parted -s ${SYSTEM} unit s mkpart boot ${BOOT_START} $(expr ${ROOTFS_START} - 1)
+		parted -s ${SYSTEM} set 4 boot on
+		parted -s ${SYSTEM} -- unit s mkpart rootfs ${ROOTFS_START} -34s
+	else
+		parted -s ${SYSTEM} mklabel gpt
+		parted -s ${SYSTEM} unit s mkpart boot ${BOOT_START} $(expr ${ROOTFS_START} - 1)
+		parted -s ${SYSTEM} set 1 boot on
+		parted -s ${SYSTEM} -- unit s mkpart rootfs ${ROOTFS_START} -34s
+	fi
 
 	if [ "$CHIP" == "rk3328" ] || [ "$CHIP" == "rk3399" ] || [ "$CHIP" == "rk3399pro" ]; then
 		ROOT_UUID="B921B045-1DF0-41C3-AF44-4C6F280D3FAE"
@@ -125,7 +132,8 @@ generate_system_image() {
 		ROOT_UUID="69DAD710-2CE4-4E3C-B16C-21A1D49ABED3"
 	fi
 
-	gdisk ${SYSTEM} <<EOF
+	if [ "$BOARD" == "rockpi4" ]; then
+		gdisk ${SYSTEM} <<EOF
 x
 c
 5
@@ -133,6 +141,16 @@ ${ROOT_UUID}
 w
 y
 EOF
+	else
+		gdisk ${SYSTEM} <<EOF
+x
+c
+2
+${ROOT_UUID}
+w
+y
+EOF
+	fi
 
 	# burn u-boot
 	if [ "$CHIP" == "rk322x" ] || [ "$CHIP" == "rk3036" ]; then
