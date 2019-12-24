@@ -29,7 +29,7 @@ case ${BOARD} in
 		;;
 	"rockpin10")
 		DEFCONFIG=rockchip_linux_defconfig
-		UBOOT_DEFCONFIG=rk3399pro_defconfig
+		UBOOT_DEFCONFIG=rk3399pro-rockpi-n10-linux-dsi_defconfig
 		DTB=rk3399pro-rockpi-n10-linux-dsi.dtb
 		export ARCH=arm64
 		export CROSS_COMPILE=aarch64-linux-gnu-
