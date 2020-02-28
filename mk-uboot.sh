@@ -170,17 +170,23 @@ EOF
 elif [ "${CHIP}" == "rk3399pro" ]; then
 	$TOOLPATH/loaderimage --pack --uboot ./u-boot-dtb.bin uboot.img 0x200000 --size 1024 1
 
-	tools/mkimage -n rk3399pro -T rksd -d ../rkbin/bin/rk33/rk3399pro_ddr_800MHz_v1.20.bin idbloader.img
-	cat ../rkbin/bin/rk33/rk3399pro_miniloader_v1.15.bin >> idbloader.img
-	cp idbloader.img ${OUT}/u-boot/
+	DDR_TYPE=("rk3399pro_ddr_800MHz_v1.20.bin" "rk3399_ddr_800MHz_v1.22_fix_row_3_4.bin")
+	DDR_TYPE_SHORT=("" "-3GB-ddr")
+	for num in {0..1}
+	do
+		tools/mkimage -n rk3399pro -T rksd -d ../rkbin/bin/rk33/${DDR_TYPE[$num]} idbloader${DDR_TYPE_SHORT[$num]}.img
+		cat ../rkbin/bin/rk33/rk3399pro_miniloader_v1.15.bin >> idbloader${DDR_TYPE_SHORT[$num]}.img
+		cp idbloader${DDR_TYPE_SHORT[$num]}.img ${OUT}/u-boot/
 
-	tools/mkimage -n rk3399pro -T rkspi -d ../rkbin/bin/rk33/rk3399pro_ddr_800MHz_v1.20.bin idbloader-spi.img
-	cat ../rkbin/bin/rk33/rk3399_miniloader_spinor_v1.14.bin >> idbloader-spi.img
-	cp idbloader-spi.img ${OUT}/u-boot/spi
+		tools/mkimage -n rk3399pro -T rkspi -d ../rkbin/bin/rk33/${DDR_TYPE[$num]} idbloader-spi${DDR_TYPE_SHORT[$num]}.img
+		cat ../rkbin/bin/rk33/rk3399_miniloader_spinor_v1.14.bin >> idbloader-spi${DDR_TYPE_SHORT[$num]}.img
+		cp idbloader-spi${DDR_TYPE_SHORT[$num]}.img ${OUT}/u-boot/spi
 
-	cp ../rkbin/bin/rk33/rk3399pro_loader_v1.20.115.bin ${OUT}/u-boot/
-	cp ../rkbin/bin/rk33/rk3399pro_npu_loader_v1.02.102.bin ${OUT}/u-boot/
-	cp ../rkbin/bin/rk33/rk3399_loader_spinor_v1.15.114.bin ${OUT}/u-boot/spi
+		cp ../rkbin/bin/rk33/rk3399pro_loader_v1.20.115.bin ${OUT}/u-boot/
+		cp ../rkbin/bin/rk33/rk3399pro_loader_3GB_ddr_v1.22.115.bin ${OUT}/u-boot/
+		cp ../rkbin/bin/rk33/rk3399pro_npu_loader_v1.02.102.bin ${OUT}/u-boot/
+		cp ../rkbin/bin/rk33/rk3399_loader_spinor_v1.15.114.bin ${OUT}/u-boot/spi
+	done
 
 	cat >trust.ini <<EOF
 [VERSION]
@@ -205,7 +211,11 @@ EOF
 	cp uboot.img ${OUT}/u-boot/
 	cp trust.img ${OUT}/u-boot/
 
-	cat > spi.ini <<EOF
+	DDR_TYPE=("rk3399pro_ddr_800MHz_v1.20.bin" "rk3399_ddr_800MHz_v1.22_fix_row_3_4.bin")
+	DDR_TYPE_SHORT=("" "-3GB-ddr")
+	for num in {0..1}
+	do
+		cat > spi.ini <<EOF
 [System]
 FwVersion=18.08.03
 BLANK_GAP=1
@@ -214,7 +224,7 @@ FILL_BYTE=0
 Name=IDBlock
 Flag=0
 Type=2
-File=../rkbin/bin/rk33/rk3399pro_ddr_800MHz_v1.20.bin,../rkbin/bin/rk33/rk3399pro_miniloader_v1.15.bin
+File=../rkbin/bin/rk33/${DDR_TYPE[$num]},../rkbin/bin/rk33/rk3399pro_miniloader_v1.15.bin
 PartOffset=0x40
 PartSize=0x7C0
 [UserPart2]
@@ -232,9 +242,10 @@ File=./trust.img
 PartOffset=0x1800
 PartSize=0x800
 EOF
-	$TOOLPATH/firmwareMerger -P spi.ini ${OUT}/u-boot/spi
-	mv ${OUT}/u-boot/spi/Firmware.img ${OUT}/u-boot/spi/uboot-trust-spi.img
-	mv ${OUT}/u-boot/spi/Firmware.md5 ${OUT}/u-boot/spi/uboot-trust-spi.img.md5
+		$TOOLPATH/firmwareMerger -P spi.ini ${OUT}/u-boot/spi
+		mv ${OUT}/u-boot/spi/Firmware.img ${OUT}/u-boot/spi/uboot-trust-spi${DDR_TYPE_SHORT[$num]}.img
+		mv ${OUT}/u-boot/spi/Firmware.md5 ${OUT}/u-boot/spi/uboot-trust-spi${DDR_TYPE_SHORT[$num]}.img.md5
+	done
 elif [ "${CHIP}" == "rk3128" ]; then
 	$TOOLPATH/loaderimage --pack --uboot ./u-boot-dtb.bin uboot.img
 
