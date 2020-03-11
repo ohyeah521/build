@@ -92,8 +92,8 @@ case ${BOARD} in
 		;;
 	"rockpis")
 		DEFCONFIG=rk3308_linux_defconfig
-		UBOOT_DEFCONFIG=rockpi-s-rk3308_defconfig
-		DTB=rockpi-s-linux.dtb
+		UBOOT_DEFCONFIG=rock-pi-s-rk3308_defconfig
+		DTB=rk3308-rock-pi-s.dtb
 		export ARCH=arm64
 		export CROSS_COMPILE=aarch64-linux-gnu-
 		CHIP="rk3308"
