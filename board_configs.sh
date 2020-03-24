@@ -21,7 +21,7 @@ case ${BOARD} in
 		;;
 	"ficus2-rk3399pro")
 		DEFCONFIG=rockchip_linux_defconfig
-		UBOOT_DEFCONFIG=rk3399pro_defconfig
+		UBOOT_DEFCONFIG=rk3399pro-ficus2_defconfig
 		DTB=rk3399pro-ficus2-linux.dtb
 		export ARCH=arm64
 		export CROSS_COMPILE=aarch64-linux-gnu-
