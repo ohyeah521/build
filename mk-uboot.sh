@@ -289,5 +289,35 @@ EOF
 
 	cp uboot.img ${OUT}/u-boot/
 	cp trust.img ${OUT}/u-boot/
+elif [ "${CHIP}" == "px30" ]; then
+	$TOOLPATH/loaderimage --pack --uboot ./u-boot-dtb.bin uboot.img 0x200000 --size 1024 1
+
+	tools/mkimage -n px30 -T rksd -d ../rkbin/bin/rk33/px30_ddr_333MHz_v1.14.bin idbloader.img
+	cat ../rkbin/bin/rk33/px30_miniloader_v1.20.bin >> idbloader.img
+	cp idbloader.img ${OUT}/u-boot/
+	cp ../rkbin/bin/rk33/px30_loader_v1.14.120.bin ${OUT}/u-boot
+
+	cat >trust.ini <<EOF
+[VERSION]
+MAJOR=1
+MINOR=0
+[BL30_OPTION]
+SEC=0
+[BL31_OPTION]
+SEC=1
+PATH=../rkbin/bin/rk33/px30_bl31_v1.18.elf
+ADDR=0x00010000
+[BL32_OPTION]
+SEC=0
+[BL33_OPTION]
+SEC=0
+[OUTPUT]
+PATH=trust.img
+EOF
+
+	$TOOLPATH/trust_merger --size 1024 1 trust.ini
+
+	cp uboot.img ${OUT}/u-boot/
+	cp trust.img ${OUT}/u-boot/
 fi
 echo -e "\e[36m U-boot IMAGE READY! \e[0m"

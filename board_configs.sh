@@ -98,6 +98,14 @@ case ${BOARD} in
 		export CROSS_COMPILE=aarch64-linux-gnu-
 		CHIP="rk3308"
 		;;
+	"rockpropx30")
+		DEFCONFIG=px30_linux_defconfig
+		UBOOT_DEFCONFIG=rockpro-px30_defconfig
+		DTB=px30-rockpro.dtb
+		export ARCH=arm64
+		export CROSS_COMPILE=aarch64-linux-gnu-
+		CHIP="px30"
+		;;
 	"ficus")
 		DEFCONFIG=rockchip_linux_defconfig
 		UBOOT_DEFCONFIG=evb-rk3399_defconfig
