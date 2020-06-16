@@ -1,25 +1,36 @@
 #!/bin/bash
 
-export KERNEL_DEFCONFIG=$1
-export RELEASE_NUMBER=$2
+usage() {
+    echo "====USAGE: pack-kernel.sh -d <kernel defconfig> -r <release_number>===="
+    echo "pack-kernel.sh -d rockchip_linux_defconfig -r 1"
+}
 
-if [ ! $KERNEL_DEFCONFIG ]; then
-    export KERNEL_DEFCONFIG="rockchip_linux_defconfig"
-fi
+while getopts "d:r:h" flag; do
+    case $flag in
+        d)
+            export KERNEL_DEFCONFIG="$OPTARG"
+            ;;
+        r)
+            export RELEASE_NUMBER="$OPTARG"
+            ;;
+    esac
+done
 
-if [ ! $RELEASE_NUMBER ]; then
-    export RELEASE_NUMBER="1"
+if [ ! $KERNEL_DEFCONFIG ] && [ ! $RELEASE_NUMBER ]; then
+    usage
+    exit
 fi
 
 CMD=`realpath $0`
 BUILD_DIR=`dirname $CMD`
 ROCKCHIP_BSP_DIR=$(realpath $BUILD_DIR/..)
-ROCKDEV_DIR=$ROCKCHIP_BSP_DIR/rockdev
-[ ! -d "$ROCKDEV_DIR" ] && mkdir $ROCKDEV_DIR
+PACKAGES_DIR=$ROCKCHIP_BSP_DIR/out/packages
+[ ! -d "$PACKAGES_DIR" ] && mkdir $PACKAGES_DIR
 KERNEL_DIR=$ROCKCHIP_BSP_DIR/kernel
 
 echo -e "\e[31m Start to pack kernel. \e[0m"
 cd ${KERNEL_DIR} && make distclean && make -f $ROCKCHIP_BSP_DIR/build/kernel-package.mk kernel-package
 
-mv $ROCKCHIP_BSP_DIR/linux-*${RELEASE_NUMBER}-rockchip*.deb $ROCKDEV_DIR
+mv $ROCKCHIP_BSP_DIR/linux-*${RELEASE_NUMBER}-rockchip*.deb $PACKAGES_DIR
+mv $ROCKCHIP_BSP_DIR/linux-*${RELEASE_NUMBER}-rockchip*.changes $PACKAGES_DIR
 echo -e "\e[31m Packing kernel is done. \e[0m"

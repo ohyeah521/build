@@ -1,7 +1,7 @@
 .PHONY: rk-ubootimg-package
 rk-ubootimg-package:
-	mkdir -p $(CURDIR)/../out/rk-ubootimg-package/root/usr/lib/u-boot-${TARGET_BOARD}
-	cp -av $(CURDIR)/../out/u-boot/*.img $(CURDIR)/../out/rk-ubootimg-package/root/usr/lib/u-boot-${TARGET_BOARD}
+	mkdir -p $(CURDIR)/../rk-ubootimg-package/root/usr/lib/u-boot-${TARGET_BOARD}
+	cp -av $(CURDIR)/../u-boot/*.img $(CURDIR)/../rk-ubootimg-package/root/usr/lib/u-boot-${TARGET_BOARD}
 	fpm -s dir -t deb -n $(TARGET_BOARD)-rk-ubootimg -v $(RELEASE_VERSION) \
 		-p $(TARGET_BOARD)-rk-ubootimg_$(RELEASE_VERSION)_all.deb \
 		--deb-priority optional --category admin \
@@ -18,4 +18,4 @@ rk-ubootimg-package:
 		-m "Radxa <dev@radxa.com>" \
 		--vendor "Radxa" \
 		-a all \
-		$(CURDIR)/../out/rk-ubootimg-package/root/=/
+		$(CURDIR)/../rk-ubootimg-package/root/=/
