@@ -110,7 +110,7 @@ elif [ "${CHIP}" == "rk3399" ]; then
 	cp idbloader-spi.img ${OUT}/u-boot/spi
 
 	cp ../rkbin/bin/rk33/rk3399_loader_v1.20.119.bin ${OUT}/u-boot/
-	cp ../rkbin/bin/rk33/rk3399_loader_spinor_v1.20.114.bin ${OUT}/u-boot/spi
+	cp ../rkbin/bin/rk33/rk3399_loader_spinor_v1.20.126.bin ${OUT}/u-boot/spi
 
 	cat >trust.ini <<EOF
 [VERSION]
