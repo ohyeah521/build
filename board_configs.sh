@@ -220,6 +220,14 @@ case ${BOARD} in
 		DTB=rk3036-kylin.dtb
 		CHIP="rk3036"
 		;;
+	"rk3568-rock3a")
+		DEFCONFIG=rockchip_linux_defconfig
+		UBOOT_DEFCONFIG=rock3a-rk3568_config
+		DTB=rk3568-rock3a.dtb
+		export ARCH=arm64
+		export CROSS_COMPILE=aarch64-linux-gnu-
+		CHIP="rk3568"
+		;;
 	*)
 		echo "board '${BOARD}' not supported!"
 		exit -1
