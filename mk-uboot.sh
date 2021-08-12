@@ -34,7 +34,10 @@ echo -e "\e[36m Building U-boot for ${BOARD} board! \e[0m"
 echo -e "\e[36m Using ${UBOOT_DEFCONFIG} \e[0m"
 
 cd ${LOCALPATH}/u-boot
-make ${UBOOT_DEFCONFIG} all
+
+if [ "${CHIP}" != "rk3568" ]; then
+	make ${UBOOT_DEFCONFIG} all
+fi
 
 if  [ "${CHIP}" == "rk322x" ] || [ "${CHIP}" == "rk3036" ]; then
 	if [ `grep CONFIG_SPL_OF_CONTROL=y ./.config` ] && \
@@ -319,5 +322,10 @@ EOF
 
 	cp uboot.img ${OUT}/u-boot/
 	cp trust.img ${OUT}/u-boot/
+elif [ "${CHIP}" == "rk3568" ]; then
+	./make.sh $(echo "${UBOOT_DEFCONFIG}" | cut -d "_" -f 1)
+	cp uboot.img ${OUT}/u-boot/
+	cp ../rkbin/bin/rk35/rk356x_spl_loader_ddr1056_v1.06.110.bin ${OUT}/u-boot/
+	cp ../build/parameter-rk3568.txt ${OUT}/
 fi
 echo -e "\e[36m U-boot IMAGE READY! \e[0m"
