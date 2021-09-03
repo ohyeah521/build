@@ -220,10 +220,10 @@ case ${BOARD} in
 		DTB=rk3036-kylin.dtb
 		CHIP="rk3036"
 		;;
-	"rk3568-rock3a")
+	"rk3568-rock-3-a")
 		DEFCONFIG=rockchip_linux_defconfig
-		UBOOT_DEFCONFIG=rock3a-rk3568_config
-		DTB=rk3568-rock3a.dtb
+		UBOOT_DEFCONFIG=rock-3-a-rk3568_config
+		DTB=rk3568-rock-3-a.dtb
 		export ARCH=arm64
 		export CROSS_COMPILE=aarch64-linux-gnu-
 		CHIP="rk3568"
