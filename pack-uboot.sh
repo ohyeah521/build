@@ -28,7 +28,7 @@ UBOOT_DIR=$ROCKCHIP_BSP_DIR/u-boot
 cd $UBOOT_DIR
 make ubootrelease > ./ubootrelease.tmp
 sed -i 's/"//g' ./ubootrelease.tmp
-export LATEST_UBOOT_VERSION=$(cat ./ubootrelease.tmp)
+export LATEST_UBOOT_VERSION=$(cat ./ubootrelease.tmp | cut -d " " -f 1)
 echo "LATEST_UBOOT_VERSION = $LATEST_UBOOT_VERSION"
 export RELEASE_VERSION=$LATEST_UBOOT_VERSION
 rm ./ubootrelease.tmp
