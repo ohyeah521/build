@@ -126,7 +126,7 @@ generate_system_image() {
 
 	if [ "$CHIP" == "rk3328" ] || [ "$CHIP" == "rk3399" ] || [ "$CHIP" == "rk3399pro" ]; then
 		ROOT_UUID="B921B045-1DF0-41C3-AF44-4C6F280D3FAE"
-	elif [ "$CHIP" == "rk3308" ] || [ "$CHIP" == "px30" ] || [ "$CHIP" == "rk3568" ]; then
+	elif [ "$CHIP" == "rk3308" ] || [ "$CHIP" == "px30" ] || [ "$CHIP" == "rk3566" ] || [ "$CHIP" == "rk3568" ]; then
 		ROOT_UUID="614e0000-0000-4b53-8000-1d28000054a9"
 	else
 		ROOT_UUID="69DAD710-2CE4-4E3C-B16C-21A1D49ABED3"
@@ -162,7 +162,7 @@ EOF
 		dd if=${OUT}/u-boot/uboot.img of=${SYSTEM} seek=${LOADER2_START} conv=notrunc
 		dd if=${OUT}/u-boot/trust.img of=${SYSTEM} seek=${ATF_START} conv=notrunc
 		;;
-	rk3568 )
+	rk3566 | rk3568 )
 		dd if=${OUT}/u-boot/idbloader.img of=${SYSTEM} seek=${LOADER1_START} conv=notrunc
 		dd if=${OUT}/u-boot/u-boot.itb of=${SYSTEM} seek=${LOADER2_START} conv=notrunc
 		;;

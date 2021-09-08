@@ -35,7 +35,7 @@ echo -e "\e[36m Using ${UBOOT_DEFCONFIG} \e[0m"
 
 cd ${LOCALPATH}/u-boot
 
-if [ "${CHIP}" != "rk3568" ]; then
+if [ "${CHIP}" != "rk3566" ] || [ "${CHIP}" != "rk3568" ]; then
 	make ${UBOOT_DEFCONFIG} all
 fi
 
@@ -322,6 +322,13 @@ EOF
 
 	cp uboot.img ${OUT}/u-boot/
 	cp trust.img ${OUT}/u-boot/
+elif [ "${CHIP}" == "rk3566" ]; then
+	make ${UBOOT_DEFCONFIG}
+	make BL31=../rkbin/bin/rk35/rk3568_bl31_v1.20.elf spl/u-boot-spl.bin u-boot.dtb u-boot.itb
+	./tools/mkimage -n rk356x -T rksd -d ../rkbin/bin/rk35/rk3566_ddr_1056MHz_v1.06.bin:spl/u-boot-spl.bin idbloader.img
+	cp u-boot.itb ${OUT}/u-boot/
+	cp idbloader.img ${OUT}/u-boot/
+	cp ../rkbin/bin/rk35/rk356x_spl_loader_ddr1056_v1.06.110.bin ${OUT}/u-boot/
 elif [ "${CHIP}" == "rk3568" ]; then
 	make ${UBOOT_DEFCONFIG}
 	make BL31=../rkbin/bin/rk35/rk3568_bl31_v1.20.elf spl/u-boot-spl.bin u-boot.dtb u-boot.itb
