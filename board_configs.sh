@@ -220,10 +220,34 @@ case ${BOARD} in
 		DTB=rk3036-kylin.dtb
 		CHIP="rk3036"
 		;;
-	"rk3566-rock-cm3-rpi-cm4-io")
+	"rk3399-fuhai")
 		DEFCONFIG=rockchip_linux_defconfig
-		UBOOT_DEFCONFIG=rock-cm3-rpi-cm4-io-rk3566_defconfig
-		DTB=rk3566-rock-cm3-rpi-cm4-io.dtb
+		UBOOT_DEFCONFIG=fuhai-rk3399_defconfig
+		DTB=rk3399-fuhai.dtb
+		export ARCH=arm64
+		export CROSS_COMPILE=aarch64-linux-gnu-
+		CHIP="rk3399"
+		;;
+	"rk3566-radxa-e23")
+		DEFCONFIG=rockchip_linux_defconfig
+		UBOOT_DEFCONFIG=radxa-e23-rk3566_defconfig
+		DTB=rk3566-radxa-e23.dtb
+		export ARCH=arm64
+		export CROSS_COMPILE=aarch64-linux-gnu-
+		CHIP="rk3566"
+		;;
+	"rk3566-radxa-cm3-raspcm4io")
+		DEFCONFIG=rockchip_linux_defconfig
+		UBOOT_DEFCONFIG=radxa-cm3-rpi-cm4-io-rk3566_defconfig
+		DTB=rk3566-radxa-cm3-rpi-cm4-io.dtb
+		export ARCH=arm64
+		export CROSS_COMPILE=aarch64-linux-gnu-
+		CHIP="rk3566"
+		;;
+	"rk3568-radxa-e25")
+		DEFCONFIG=rockchip_linux_defconfig
+		UBOOT_DEFCONFIG=radxa-e25-rk3568_defconfig
+		DTB=rk3568-radxa-e25.dtb
 		export ARCH=arm64
 		export CROSS_COMPILE=aarch64-linux-gnu-
 		CHIP="rk3566"
