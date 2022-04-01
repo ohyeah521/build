@@ -267,10 +267,10 @@ elif [ "${CHIP}" == "rk3128" ]; then
 elif [ "${CHIP}" == "rk3308" ]; then
 	$TOOLPATH/loaderimage --pack --uboot ./u-boot-dtb.bin uboot.img 0x600000 --size 1024 1
 
-	tools/mkimage -n rk3308 -T rksd -d ../rkbin/bin/rk33/rk3308_ddr_589MHz_uart0_m0_v1.26.bin idbloader.img
-	cat ../rkbin/bin/rk33/rk3308_miniloader_emmc_port_support_sd_20190717.bin >> idbloader.img
+	tools/mkimage -n rk3308 -T rksd -d ../rkbin/bin/rk33/rk3308_ddr_589MHz_uart0_m0_v2.06.bin idbloader.img
+	cat ../rkbin/bin/rk33/rk3308_miniloader_v1.36_sd.bin >> idbloader.img
 	cp idbloader.img ${OUT}/u-boot/
-	cp ../rkbin/bin/rk33/rk3308_loader_uart0_m0_emmc_port_support_sd_20190717.bin ${OUT}/u-boot
+	cp ../rkbin/bin/rk33/rk3308_loader_ddr589MHz_uart0_m0_v2.06.136sd.bin ${OUT}/u-boot
 
 	cat >trust.ini <<EOF
 [VERSION]
@@ -280,7 +280,7 @@ MINOR=0
 SEC=0
 [BL31_OPTION]
 SEC=1
-PATH=../rkbin/bin/rk33/rk3308_bl31_v2.10.elf
+PATH=../rkbin/bin/rk33/rk3308_bl31_v2.24.elf
 ADDR=0x00010000
 [BL32_OPTION]
 SEC=0
