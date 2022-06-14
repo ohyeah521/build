@@ -338,9 +338,9 @@ elif [ "${CHIP}" == "rk3568" ]; then
 	cp u-boot.itb ${OUT}/u-boot/
 	cp idbloader.img ${OUT}/u-boot/
 	cp ../rkbin/bin/rk35/rk356x_spl_loader_ddr1056_v1.10.111.bin ${OUT}/u-boot/
-elif [ "${CHIP}" == "rk3588" ]; then
+elif [ "${CHIP}" == "rk3588s" ] || [ "${CHIP}" == "rk3588" ]; then
 	make ${UBOOT_DEFCONFIG}
-	make BL31=../rkbin/bin/rk35/rk3588_bl31_v1.22.elf spl/u-boot-spl.bin u-boot.dtb u-boot.itb
+	make BL31=../rkbin/bin/rk35/rk3588_bl31_v1.25.elf spl/u-boot-spl.bin u-boot.dtb u-boot.itb
 	./tools/mkimage -n rk3588 -T rksd -d ../rkbin/bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2736MHz_v1.07.bin:spl/u-boot-spl.bin idbloader.img
 	cp u-boot.itb ${OUT}/u-boot/
 	cp idbloader.img ${OUT}/u-boot/
