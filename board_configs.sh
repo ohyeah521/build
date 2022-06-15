@@ -265,7 +265,7 @@ case ${BOARD} in
 		UBOOT_DEFCONFIG=rock-5a-rk3588s_defconfig
 		DTB=rk3588s-rock-5a.dtb
 		export ARCH=arm64
-		export CROSS_COMPILE=aarch64-linux-gnu-
+		export CROSS_COMPILE=aarch64-none-linux-gnu-
 		CHIP="rk3588s"
 		;;
 	"rk3588-rock-5b")
@@ -273,7 +273,7 @@ case ${BOARD} in
 		UBOOT_DEFCONFIG=rock-5b-rk3588_defconfig
 		DTB=rk3588-rock-5b.dtb
 		export ARCH=arm64
-		export CROSS_COMPILE=aarch64-linux-gnu-
+		export CROSS_COMPILE=aarch64-none-linux-gnu-
 		CHIP="rk3588"
 		;;
 	*)
