@@ -252,13 +252,29 @@ case ${BOARD} in
 		export CROSS_COMPILE=aarch64-linux-gnu-
 		CHIP="rk3566"
 		;;
-	"rk3568-rock-3-a")
+	"rk3568-rock-3a")
 		DEFCONFIG=rockchip_linux_defconfig
 		UBOOT_DEFCONFIG=rock-3-a-rk3568_config
 		DTB=rk3568-rock-3-a.dtb
 		export ARCH=arm64
 		export CROSS_COMPILE=aarch64-linux-gnu-
 		CHIP="rk3568"
+		;;
+	"rk3568-rock-3b")
+		DEFCONFIG=rockchip_linux_defconfig
+		UBOOT_DEFCONFIG=rock-3-b-rk3568_config
+		DTB=rk3568-rock-3-b.dtb
+		export ARCH=arm64
+		export CROSS_COMPILE=aarch64-linux-gnu-
+		CHIP="rk3568"
+		;;
+	"rk3588s-radxa-nx5")
+		DEFCONFIG=rockchip_linux_defconfig
+		UBOOT_DEFCONFIG=radxa-nx5-rk3588s_defconfig
+		DTB=rk3588s-radxa-nx5.dtb
+		export ARCH=arm64
+		export CROSS_COMPILE=aarch64-none-linux-gnu-
+		CHIP="rk3588s"
 		;;
 	"rk3588s-rock-5a")
 		DEFCONFIG=rockchip_linux_defconfig
