@@ -250,20 +250,20 @@ case ${BOARD} in
 		DTB=rk3568-radxa-e25.dtb
 		export ARCH=arm64
 		export CROSS_COMPILE=aarch64-linux-gnu-
-		CHIP="rk3566"
+		CHIP="rk3568"
 		;;
 	"rk3568-rock-3a")
 		DEFCONFIG=rockchip_linux_defconfig
-		UBOOT_DEFCONFIG=rock-3-a-rk3568_config
-		DTB=rk3568-rock-3-a.dtb
+		UBOOT_DEFCONFIG=rock-3a-rk3568_config
+		DTB=rk3568-rock-3a.dtb
 		export ARCH=arm64
 		export CROSS_COMPILE=aarch64-linux-gnu-
 		CHIP="rk3568"
 		;;
 	"rk3568-rock-3b")
 		DEFCONFIG=rockchip_linux_defconfig
-		UBOOT_DEFCONFIG=rock-3-b-rk3568_config
-		DTB=rk3568-rock-3-b.dtb
+		UBOOT_DEFCONFIG=rock-3b-rk3568_config
+		DTB=rk3568-rock-3b.dtb
 		export ARCH=arm64
 		export CROSS_COMPILE=aarch64-linux-gnu-
 		CHIP="rk3568"
