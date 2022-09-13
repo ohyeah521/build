@@ -24,6 +24,8 @@ fi
 [ ! -d ${OUT}/u-boot ] && mkdir ${OUT}/u-boot
 [ ! -d ${OUT}/u-boot/spi ] && mkdir ${OUT}/u-boot/spi
 
+SPI_IMAGE=${OUT}/u-boot/spi/spi_image.img
+
 source $LOCALPATH/build/board_configs.sh $BOARD
 
 if [ $? -ne 0 ]; then
@@ -345,6 +347,19 @@ elif [ "${CHIP}" == "rk3588s" ] || [ "${CHIP}" == "rk3588" ]; then
 	cp u-boot.itb ${OUT}/u-boot/
 	cp idbloader.img ${OUT}/u-boot/
 	cp ../rkbin/bin/rk35/rk3588_spl_loader_v1.08.111.bin ${OUT}/u-boot
+
+    # Generate SPI image
+    dd if=/dev/zero of=$SPI_IMAGE bs=1M count=0 seek=16
+    parted -s $SPI_IMAGE mklabel gpt
+    parted -s $SPI_IMAGE unit s mkpart idbloader 64 7167
+    parted -s $SPI_IMAGE unit s mkpart vnvm 7168 7679
+    parted -s $SPI_IMAGE unit s mkpart reserved_space 7680 8063
+    parted -s $SPI_IMAGE unit s mkpart reserved1 8064 8127
+    parted -s $SPI_IMAGE unit s mkpart uboot_env 8128 8191
+    parted -s $SPI_IMAGE unit s mkpart reserved2 8192 16383
+    parted -s $SPI_IMAGE unit s mkpart uboot 16384 32734
+    dd if=${OUT}/u-boot/idbloader.img of=$SPI_IMAGE seek=64 conv=notrunc
+    dd if=${OUT}/u-boot/u-boot.itb of=$SPI_IMAGE seek=16384 conv=notrunc
 fi
 
 echo -e "\e[36m U-boot IMAGE READY! \e[0m"
