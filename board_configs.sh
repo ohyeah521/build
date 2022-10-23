@@ -319,3 +319,9 @@ case ${BOARD} in
 		exit -1
 		;;
 esac
+
+#build on native arm64
+if [ "X$(uname -m)" == "Xaarch64" -a "X${ARCH}" == "Xarm64" ]; then
+        unset ARCH
+        unset CROSS_COMPILE
+fi
