@@ -298,6 +298,14 @@ case ${BOARD} in
 		export CROSS_COMPILE=aarch64-linux-gnu-
 		CHIP="rk3568"
 		;;
+	"rk3588s-radxa-cm5-io")
+		DEFCONFIG=rockchip_linux_defconfig
+		UBOOT_DEFCONFIG=radxa-cm5-io-rk3588s_defconfig
+		DTB=rk3588s-radxa-cm5-io.dtb
+		export ARCH=arm64
+		export CROSS_COMPILE=aarch64-none-linux-gnu-
+		CHIP="rk3588s"
+		;;
 	"rk3588s-radxa-nx5")
 		DEFCONFIG=rockchip_linux_defconfig
 		UBOOT_DEFCONFIG=radxa-nx5-rk3588s_defconfig
