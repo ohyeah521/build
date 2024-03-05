@@ -92,7 +92,7 @@ elif [ "${CHIP}" == "rk3288" ]; then
 elif [ "${CHIP}" == "rk3328" ]; then
 	$TOOLPATH/loaderimage --pack --uboot ./u-boot-dtb.bin uboot.img 0x200000 --size 1024 1
 
-	tools/mkimage -n rk3328 -T rksd -d ../rkbin/bin/rk33/rk3328_ddr_333MHz_v1.16.bin idbloader.img
+	tools/mkimage -n rk3328 -T rksd -d ../rkbin/bin/rk33/rk3328_ddr_333MHz_v1.19.bin idbloader.img
 	cat ../rkbin/bin/rk33/rk322xh_miniloader_v2.50.bin >> idbloader.img
 	cp idbloader.img ${OUT}/u-boot/	
 	cp ../rkbin/bin/rk33/rk3328_loader_ddr333_v1.16.250.bin ${OUT}/u-boot/
@@ -105,7 +105,7 @@ MINOR=2
 SEC=0
 [BL31_OPTION]
 SEC=1
-PATH=../rkbin/bin/rk33/rk322xh_bl31_v1.42.elf
+PATH=../rkbin/bin/rk33/rk322xh_bl31_v1.49.elf
 ADDR=0x10000
 [BL32_OPTION]
 SEC=0
@@ -123,7 +123,7 @@ elif [ "${CHIP}" == "rk3399" ]; then
 	$TOOLPATH/loaderimage --pack --uboot ./u-boot-dtb.bin uboot.img 0x200000 --size 1024 1
 
 	tools/mkimage -n rk3399 -T rksd -d ../rkbin/bin/rk33/rk3399_ddr_800MHz_v1.30.bin idbloader.img
-	cat ../rkbin/bin/rk33/rk3399_miniloader_v1.26.bin >> idbloader.img
+	cat ../rkbin/bin/rk33/rk3399_miniloader_v1.30.bin >> idbloader.img
 	cp idbloader.img ${OUT}/u-boot/
 
 	tools/mkimage -n rk3399 -T rkspi -d ../rkbin/bin/rk33/rk3399_ddr_800MHz_v1.30.bin idbloader-spi.img
@@ -191,12 +191,12 @@ EOF
 elif [ "${CHIP}" == "rk3399pro" ]; then
 	$TOOLPATH/loaderimage --pack --uboot ./u-boot-dtb.bin uboot.img 0x200000 --size 1024 1
 
-	DDR_TYPE=("rk3399pro_ddr_800MHz_v1.20.bin" "rk3399_ddr_800MHz_v1.22_fix_row_3_4.bin")
+	DDR_TYPE=("rk3399pro_ddr_800MHz_v1.30.bin" "rk3399_ddr_800MHz_v1.22_fix_row_3_4.bin")
 	DDR_TYPE_SHORT=("" "-3GB-ddr")
 	for num in {0..1}
 	do
 		tools/mkimage -n rk3399pro -T rksd -d ../rkbin/bin/rk33/${DDR_TYPE[$num]} idbloader${DDR_TYPE_SHORT[$num]}.img
-		cat ../rkbin/bin/rk33/rk3399pro_miniloader_v1.15.bin >> idbloader${DDR_TYPE_SHORT[$num]}.img
+		cat ../rkbin/bin/rk33/rk3399pro_miniloader_v1.26.bin >> idbloader${DDR_TYPE_SHORT[$num]}.img
 		cp idbloader${DDR_TYPE_SHORT[$num]}.img ${OUT}/u-boot/
 
 		tools/mkimage -n rk3399pro -T rkspi -d ../rkbin/bin/rk33/${DDR_TYPE[$num]} idbloader-spi${DDR_TYPE_SHORT[$num]}.img
@@ -206,7 +206,7 @@ elif [ "${CHIP}" == "rk3399pro" ]; then
 		cp ../rkbin/bin/rk33/rk3399pro_loader_v1.20.115.bin ${OUT}/u-boot/
 		cp ../rkbin/bin/rk33/rk3399pro_loader_3GB_ddr_v1.22.115.bin ${OUT}/u-boot/
 		cp ../rkbin/bin/rk33/rk3399pro_npu_loader_v1.02.102.bin ${OUT}/u-boot/
-		cp ../rkbin/bin/rk33/rk3399_loader_spinor_v1.15.114.bin ${OUT}/u-boot/spi
+		cp ../rkbin/bin/rk33/rk3399_loader_spinor_v1.20.126.bin ${OUT}/u-boot/spi
 	done
 
 	cat >trust.ini <<EOF
@@ -217,7 +217,7 @@ MINOR=0
 SEC=0
 [BL31_OPTION]
 SEC=1
-PATH=../rkbin/bin/rk33/rk3399pro_bl31_v1.22.elf
+PATH=../rkbin/bin/rk33/rk3399pro_bl31_v1.35.elf
 ADDR=0x10000
 [BL32_OPTION]
 SEC=0
@@ -232,7 +232,7 @@ EOF
 	cp uboot.img ${OUT}/u-boot/
 	cp trust.img ${OUT}/u-boot/
 
-	DDR_TYPE=("rk3399pro_ddr_800MHz_v1.20.bin" "rk3399_ddr_800MHz_v1.22_fix_row_3_4.bin")
+	DDR_TYPE=("rk3399pro_ddr_800MHz_v1.30.bin" "rk3399_ddr_800MHz_v1.22_fix_row_3_4.bin")
 	DDR_TYPE_SHORT=("" "-3GB-ddr")
 	for num in {0..1}
 	do
@@ -245,7 +245,7 @@ FILL_BYTE=0
 Name=IDBlock
 Flag=0
 Type=2
-File=../rkbin/bin/rk33/${DDR_TYPE[$num]},../rkbin/bin/rk33/rk3399pro_miniloader_v1.15.bin
+File=../rkbin/bin/rk33/${DDR_TYPE[$num]},../rkbin/bin/rk33/rk3399pro_miniloader_v1.26.bin
 PartOffset=0x40
 PartSize=0x7C0
 [UserPart2]
@@ -342,24 +342,24 @@ EOF
 	cp trust.img ${OUT}/u-boot/
 elif [ "${CHIP}" == "rk3566" ]; then
 	make ${UBOOT_DEFCONFIG}
-	make BL31=../rkbin/bin/rk35/rk3568_bl31_set_pmic_sleep_low_20221018_v1.32.elf spl/u-boot-spl.bin u-boot.dtb u-boot.itb
-	./tools/mkimage -n rk3568 -T rksd -d ../rkbin/bin/rk35/rk3566_ddr_1056MHz_v1.16.bin:spl/u-boot-spl.bin idbloader.img
+	make BL31=../rkbin/bin/rk35/rk3568_bl31_v1.44.elf spl/u-boot-spl.bin u-boot.dtb u-boot.itb
+	./tools/mkimage -n rk3568 -T rksd -d ../rkbin/bin/rk35/rk3566_ddr_1056MHz_v1.21.bin:spl/u-boot-spl.bin idbloader.img
 	cp u-boot.itb ${OUT}/u-boot/
 	cp idbloader.img ${OUT}/u-boot/
 	cp ../rkbin/bin/rk35/rk356x_spl_loader_ddr1056_v1.10.111.bin ${OUT}/u-boot/
 	generate_spi_image
 elif [ "${CHIP}" == "rk3568" ]; then
 	make ${UBOOT_DEFCONFIG}
-	make BL31=../rkbin/bin/rk35/rk3568_bl31_set_pmic_sleep_low_20221018_v1.32.elf spl/u-boot-spl.bin u-boot.dtb u-boot.itb
-	./tools/mkimage -n rk3568 -T rksd -d ../rkbin/bin/rk35/rk3568_ddr_1056MHz_v1.16.bin:spl/u-boot-spl.bin idbloader.img
+	make BL31=../rkbin/bin/rk35/rk3568_bl31_v1.44.elf spl/u-boot-spl.bin u-boot.dtb u-boot.itb
+	./tools/mkimage -n rk3568 -T rksd -d ../rkbin/bin/rk35/rk3568_ddr_1056MHz_v1.21.bin:spl/u-boot-spl.bin idbloader.img
 	cp u-boot.itb ${OUT}/u-boot/
 	cp idbloader.img ${OUT}/u-boot/
 	cp ../rkbin/bin/rk35/rk356x_spl_loader_ddr1056_v1.10.111.bin ${OUT}/u-boot/
 	generate_spi_image
 elif [ "${CHIP}" == "rk3588s" ] || [ "${CHIP}" == "rk3588" ]; then
 	make ${UBOOT_DEFCONFIG}
-	make BL31=../rkbin/bin/rk35/rk3588_bl31_v1.34.elf spl/u-boot-spl.bin u-boot.dtb u-boot.itb
-	./tools/mkimage -n rk3588 -T rksd -d ../rkbin/bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2736MHz_v1.08.bin:spl/u-boot-spl.bin idbloader.img
+	make BL31=../rkbin/bin/rk35/rk3588_bl31_v1.45.elf spl/u-boot-spl.bin u-boot.dtb u-boot.itb
+	./tools/mkimage -n rk3588 -T rksd -d ../rkbin/bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2400MHz_v1.16.bin:spl/u-boot-spl.bin idbloader.img
 	cp u-boot.itb ${OUT}/u-boot/
 	cp idbloader.img ${OUT}/u-boot/
 	cp ../rkbin/bin/rk35/rk3588_spl_loader_v1.08.111.bin ${OUT}/u-boot
