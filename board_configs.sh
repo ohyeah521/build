@@ -354,6 +354,14 @@ case ${BOARD} in
 		export CROSS_COMPILE=aarch64-none-linux-gnu-
 		CHIP="rk3588"
 		;;
+	"rk3588-rock-5b-plus")
+		DEFCONFIG=rockchip_linux_defconfig
+		UBOOT_DEFCONFIG=rock-5b-plus-rk3588_defconfig
+		DTB=rk3588-rock-5b-plus.dtb
+		export ARCH=arm64
+		export CROSS_COMPILE=aarch64-none-linux-gnu-
+		CHIP="rk3588"
+		;;
 	*)
 		echo "board '${BOARD}' not supported!"
 		exit -1
