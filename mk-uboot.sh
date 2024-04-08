@@ -369,7 +369,7 @@ elif [ "${CHIP}" == "rk3588s" ] || [ "${CHIP}" == "rk3588" ]; then
 	./tools/mkimage -n rk3588 -T rksd -d ../rkbin/bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2400MHz_v1.16.bin:spl/u-boot-spl.bin idbloader.img
 	cp u-boot.itb ${OUT}/u-boot/
 	cp idbloader.img ${OUT}/u-boot/
-	cp ../rkbin/bin/rk35/rk3588_spl_loader_v1.08.111.bin ${OUT}/u-boot
+	cp ../rkbin/bin/rk35/rk3588_spl_loader_v1.15.113.bin ${OUT}/u-boot
 	generate_spi_image
 fi
 
